@@ -7,27 +7,19 @@
 #include <avr/io.h>
 #include <FreeRTOS.h>
 #include <task.h>
-#include <led.h>
 #include <atmel_start.h>
 #include <time.h>
 #include <util/delay.h>
 
-#define mainLED_TASK_PRIORITY			(tskIDLE_PRIORITY)
-#define mainLED_TASK_PRIORITY 			(tskIDLE_PRIORITY+1)
-// #define mainNEXT_TASK_2				(tskIDLE_PRIORITY+2)
-// #define mainNEXT_TASK_3				(tskIDLE_PRIORITY+3)
-//
-
-
 void vLEDFlashTask(void *pvParms)
 {
-	vLEDInit();
-	portTickType xLastWakeTime;
-	const portTickType xFrequency = 1000;
+	DDRB |= _BV(PB5);
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = 1000;
 	xLastWakeTime = xTaskGetTickCount();
 
 	for(;;) {
-		vLEDToggle();
+		PORTB ^= _BV(PB5); // green
 		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
@@ -47,12 +39,18 @@ int main(void)
 	}
 	*/
 
-	/* Replace with your application code */
-	xTaskCreate(vLEDFlashTask, (int8_t*) "LED", configMINIMAL_STACK_SIZE, NULL, mainLED_TASK_PRIORITY, NULL);
+	static StaticTask_t led_task_tcb __attribute__((section(".noinit")));
+	static StackType_t led_task_stack[64] __attribute__((section(".noinit")));
+	xTaskCreateStatic(vLEDFlashTask, "LED", 64, NULL, 1, led_task_stack, &led_task_tcb);
 
 	vTaskStartScheduler();
 }
 
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
+    for(;;);
+}
+
+/*
 void vApplicationIdleHook( void );
 
 void vApplicationIdleHook( void )
@@ -63,4 +61,4 @@ void vApplicationIdleHook( void )
 	}
 	//vCoRoutineSchedule();
 }
-
+*/

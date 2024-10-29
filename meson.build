@@ -8,23 +8,21 @@ project('csp-avr', 'c', subproject_dir: 'lib', default_options: [
 	'csp:use_promisc=false',
 ])
 
-mcu = 'atmega328p'
-compiler = 'avr-gcc'
-
-# Set compiler and linker arguments specific to AVR
-#c_args = ['-mmcu=' + mcu, '-Os']
-#link_args = ['-mmcu=' + mcu]
-
-# Retrieve the Atmel Start dependency
 atmel_start_dep = subproject('start').get_variable('atmel_start_dep')
 freertos_dep = subproject('freertos').get_variable('freertos_dep')
 
-# Main project source files
-sources = files('src/main.c')
+sources = files(
+  'src/main.c',
+)
+
+#include_dirs = include_directories(
+#  'include',
+#)
 
 # Define the executable and link with Atmel Start and FreeRTOS libraries
 main_elf = executable('main',
   sources,
+  #  include_directories: include_dirs,
   #c_args: c_args,
   link_args: [
     '-Wl,-Map,output.map'

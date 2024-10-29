@@ -1,3 +1,6 @@
 [submodule "lib/csp"]
 	path = lib/csp
 	url = https://github.com/spaceinventor/libcsp
+[submodule "lib/freertos"]
+	path = lib/freertos
+	url = https://github.com/edvardxyz/FreeRTOS-Kernel
