@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+avrdude -c xplainedmini -p atmega328pb -P usb -U flash:w:build/main.hex:i

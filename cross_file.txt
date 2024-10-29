@@ -1,0 +1,17 @@
+[binaries]
+c = 'avr-gcc'
+ar = 'avr-ar'
+strip = 'avr-strip'
+
+[host_machine]
+system = 'baremetal'
+cpu_family = 'avr'
+cpu = 'atmega328pb'
+endian = 'little'
+
+[properties]
+freertos_port = 'PORT_AVR' 
+
+[built-in options]
+c_args = ['-mmcu=atmega328pb', '-ffunction-sections', '-fdata-sections', '-fstack-usage', '-I../lib/start/src/include', '-D__AVR_ATmega328PB__', '-DF_CPU=16000000UL']
+c_link_args = ['-mmcu=atmega328pb', '-ffunction-sections', '-fdata-sections']

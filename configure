@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -r build
+
+meson setup --cross-file cross_file.txt build
