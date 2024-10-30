@@ -42,6 +42,43 @@ void I2C_0_initialization(void)
 	I2C_0_init();
 }
 
+/* configure the pins and initialize the registers */
+void SPI_0_initialization(void)
+{
+
+	// Set pin direction to input
+	PB4_set_dir(PORT_DIR_IN);
+
+	PB4_set_pull_mode(
+	    // <y> Pull configuration
+	    // <id> pad_pull_config
+	    // <PORT_PULL_OFF"> Off
+	    // <PORT_PULL_UP"> Pull-up
+	    PORT_PULL_OFF);
+
+	// Set pin direction to output
+	PB3_set_dir(PORT_DIR_OUT);
+
+	PB3_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	// Set pin direction to output
+	PB5_set_dir(PORT_DIR_OUT);
+
+	PB5_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	SPI_0_init();
+}
+
 /* configure pins and initialize registers */
 void USART_0_initialization(void)
 {
@@ -78,11 +115,11 @@ void system_init()
 
 	sysctrl_init();
 
-	FLASH_0_init();
-
 	WDT_0_init();
 
 	I2C_0_initialization();
+
+	SPI_0_initialization();
 
 	USART_0_initialization();
 }

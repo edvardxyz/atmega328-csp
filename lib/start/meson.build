@@ -11,12 +11,12 @@ atmel_start_sources = files(
 atmel_start_sources += files(
   'src/src/driver_init.c',
   'src/src/i2c_simple_master.c',
-  'src/src/nvmctrl_basic.c',
   'src/src/usart_basic.c',
   'src/src/i2c_master.c',
   'src/src/i2c_types.c',
   'src/src/protected_io.S',
-  'src/src/wdt.c'
+  'src/src/wdt.c',
+  'src/src/spi_basic.c',
 )
 
 # Define include directories

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-meson compile -C build && avr-size -C --mcu=atmega328pb build/main
+meson compile -C build && avr-size -C --mcu=atmega328p build/main

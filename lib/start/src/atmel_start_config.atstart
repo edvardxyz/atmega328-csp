@@ -28,7 +28,7 @@ drivers:
     configuration:
       $input: 32768
       RESERVED_InputFreq: 32768
-      _$freq_output_Async input clock: '32768'
+      _$freq_output_Async input clock: 32768
       _$freq_output_Input clock: 8000000
       async_input_speed: 32768
       clkadc_oscillator: Input clock
@@ -62,32 +62,6 @@ drivers:
           external: false
           external_frequency: 0
         configuration: {}
-  FLASH_0:
-    user_label: FLASH_0
-    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::EEPROM::driver_config_definition::NVMCTRL.Basic::Drivers:NVMCTRL:Basic
-    functionality: Flash
-    api: Drivers:NVMCTRL:Basic
-    configuration:
-      blbset: false
-      eempe: false
-      eepe: false
-      eepm0: false
-      eepm1: false
-      eere: false
-      eerie: false
-      nvmctrl_irq_driven: false
-      nvmctrl_relocate_flash_functions: false
-      pgers: false
-      pgwrt: false
-      rwwsb: false
-      rwwsre: false
-      sigrd: false
-      spmen: false
-      spmie: false
-    optional_signals: []
-    variant: null
-    clocks:
-      domain_group: null
   WDT_0:
     user_label: WDT_0
     definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::WDT::driver_config_definition::WDT::Drivers:WDT:Init
@@ -116,13 +90,49 @@ drivers:
     variant: null
     clocks:
       domain_group: null
+  SPI_0:
+    user_label: SPI_0
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::SPI0::driver_config_definition::SPI.Master.Interrupt::Drivers:SPI:Basic
+    functionality: SPI
+    api: Drivers:SPI:Basic
+    configuration:
+      spi_cpha: Sample on leading edge
+      spi_cpol: SCK is low when idle
+      spi_dord: MSB transmitted first
+      spi_mstr: Master mode
+      spi_open_close: false
+      spi_spe: true
+      spi_spie: true
+      spi_spr: fosc/4
+    optional_signals: []
+    variant:
+      specification: MASTER=1
+      required_signals:
+      - name: SPI0/MISO
+        pad: PB4
+        label: MISO
+      - name: SPI0/MOSI
+        pad: PB3
+        label: MOSI
+      - name: SPI0/SCK
+        pad: PB5
+        label: SCK
+    clocks:
+      domain_group:
+        nodes:
+        - name: SPI
+          input: CLKio
+          external: false
+          external_frequency: 0
+        configuration:
+          spi_clock_source: CLKio
   USART_0:
     user_label: USART_0
     definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::USART0::driver_config_definition::Async.Polled.Mode::Drivers:USART:Basic
     functionality: USART
     api: Drivers:USART:Basic
     configuration:
-      printf_support: false
+      printf_support: true
       usart_baud_rate: 9600
       usart_mpcm: false
       usart_rxcie: true
@@ -158,6 +168,24 @@ drivers:
         configuration:
           usart_clock_source: CLKio
 pads:
+  PB3:
+    name: PB3
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PB3
+    mode: Digital output
+    user_label: PB3
+    configuration: null
+  PB4:
+    name: PB4
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PB4
+    mode: Digital input
+    user_label: PB4
+    configuration: null
+  PB5:
+    name: PB5
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PB5
+    mode: Digital output
+    user_label: PB5
+    configuration: null
   PD0:
     name: PD0
     definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PD0
@@ -172,24 +200,24 @@ pads:
     configuration: null
 toolchain_options:
 - definition:
-    identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Microchip.Studio.gcc:7.0.0
-  configuration:
-    compiler_config:
-      avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
-    linker_config:
-      avrgcc_linker_miscellaneous_LinkerFlags: ''
-- definition:
     identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Microchip.Studio.xc8:7.0.0
   configuration:
     compiler_config:
-      xc8_compiler_miscellaneous_OtherFlags: -std=gnu99
+      xc8_compiler_miscellaneous_OtherFlags: ''
     linker_config:
       xc8_linker_miscellaneous_LinkerFlags: ''
+- definition:
+    identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Microchip.Studio.gcc:7.0.0
+  configuration:
+    compiler_config:
+      avrgcc_compiler_miscellaneous_OtherFlags: ''
+    linker_config:
+      avrgcc_linker_miscellaneous_LinkerFlags: ''
 - definition:
     identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Atmel.Studio:7.0.0
   configuration:
     compiler_config:
-      avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
+      avrgcc_compiler_miscellaneous_OtherFlags: ''
     linker_config:
       avrgcc_linker_miscellaneous_LinkerFlags: ''
 static_files: []

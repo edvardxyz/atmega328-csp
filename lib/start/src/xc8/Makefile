@@ -32,15 +32,15 @@ examples/src
 
 # List the object files
 OBJS +=  \
-src/nvmctrl_basic.o \
 src/wdt.o \
 main.o \
-examples/src/nvmctrl_basic_example.o \
+src/spi_basic.o \
 src/i2c_simple_master.o \
 examples/src/usart_basic_example.o \
 driver_isr.o \
 src/usart_basic.o \
 src/i2c_types.o \
+examples/src/spi_basic_example.o \
 atmel_start.o \
 src/i2c_master.o \
 src/protected_io.o \
@@ -48,15 +48,15 @@ src/driver_init.o \
 examples/src/i2c_master_example.o
 
 OBJS_AS_ARGS +=  \
-"src/nvmctrl_basic.o" \
 "src/wdt.o" \
 "main.o" \
-"examples/src/nvmctrl_basic_example.o" \
+"src/spi_basic.o" \
 "src/i2c_simple_master.o" \
 "examples/src/usart_basic_example.o" \
 "driver_isr.o" \
 "src/usart_basic.o" \
 "src/i2c_types.o" \
+"examples/src/spi_basic_example.o" \
 "atmel_start.o" \
 "src/i2c_master.o" \
 "src/protected_io.o" \
@@ -68,19 +68,19 @@ DEPS := $(OBJS:%.o=%.d)
 
 DEPS_AS_ARGS +=  \
 "src/i2c_simple_master.d" \
-"examples/src/nvmctrl_basic_example.d" \
+"src/wdt.d" \
 "examples/src/usart_basic_example.d" \
 "src/usart_basic.d" \
-"src/nvmctrl_basic.d" \
 "main.d" \
-"src/wdt.d" \
 "src/i2c_master.d" \
+"src/spi_basic.d" \
 "examples/src/i2c_master_example.d" \
 "src/driver_init.d" \
 "src/i2c_types.d" \
 "src/protected_io.d" \
 "driver_isr.d" \
-"atmel_start.d"
+"atmel_start.d" \
+"examples/src/spi_basic_example.d"
 
 MAKEFILE_DIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 OUTPUT_FILE_NAME :=AtmelStart

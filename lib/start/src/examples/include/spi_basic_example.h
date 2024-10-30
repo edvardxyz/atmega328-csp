@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief NVMCTRL basic driver example.
+ * \brief SPI basic driver example.
  *
  (c) 2020 Microchip Technology Inc. and its subsidiaries.
 
@@ -25,9 +25,9 @@
  *
  */
 
-#ifndef NVMCTRL_BASIC_EXAMPLE_H
-#define NVMCTRL_BASIC_EXAMPLE_H
+#ifndef SPI_BASIC_EXAMPLE_H
+#define SPI_BASIC_EXAMPLE_H
 
-uint8_t FLASH_0_test_nvmctrl_basic(void);
+uint8_t SPI_0_test_spi_basic(void);
 
-#endif /* NVMCTRL_BASIC_EXAMPLE_H */
+#endif /* SPI_BASIC_EXAMPLE_H */

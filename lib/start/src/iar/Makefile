@@ -73,15 +73,15 @@ SRC_DIRS +=  src examples/src
 # We use .o suffix rather than .r90 for all object files.
 
 OBJS +=  \
-$(OBJDIR)/nvmctrl_basic.o \
 $(OBJDIR)/wdt.o \
 $(OBJDIR)/main.o \
-$(OBJDIR)/nvmctrl_basic_example.o \
+$(OBJDIR)/spi_basic.o \
 $(OBJDIR)/i2c_simple_master.o \
 $(OBJDIR)/usart_basic_example.o \
 $(OBJDIR)/driver_isr.o \
 $(OBJDIR)/usart_basic.o \
 $(OBJDIR)/i2c_types.o \
+$(OBJDIR)/spi_basic_example.o \
 $(OBJDIR)/atmel_start.o \
 $(OBJDIR)/i2c_master.o \
 $(OBJDIR)/protected_io.o \

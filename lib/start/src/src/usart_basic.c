@@ -39,6 +39,27 @@
 #include <usart_basic.h>
 #include <atomic.h>
 
+#include <stdio.h>
+
+#if defined(__GNUC__)
+
+int USART_0_printCHAR(char character, FILE *stream)
+{
+	USART_0_write(character);
+	return 0;
+}
+
+FILE USART_0_stream = FDEV_SETUP_STREAM(USART_0_printCHAR, NULL, _FDEV_SETUP_WRITE);
+
+#elif defined(__ICCAVR__)
+
+int putchar(int outChar)
+{
+	USART_0_write(outChar);
+	return outChar;
+}
+#endif
+
 /**
  * \brief Initialize USART interface
  * If module is configured to disabled state, the clock to the USART is disabled
@@ -80,6 +101,10 @@ int8_t USART_0_init()
 
 	// UCSR0D = 0 << RXSIE /* USART RX Start Interrupt Enable: disabled */
 	//		 | 0 << SFDE; /* Start Frame Detection Enable: disabled */
+
+#if defined(__GNUC__)
+	stdout = &USART_0_stream;
+#endif
 
 	return 0;
 }
