@@ -4,13 +4,13 @@ ar = 'avr-ar'
 strip = 'avr-strip'
 
 [host_machine]
-system = 'baremetal'
+system = 'freertos'
 cpu_family = 'avr'
 cpu = 'atmega328pb'
 endian = 'little'
 
 [properties]
-freertos_port = 'PORT_AVR' 
+freertos_port = 'GCC/ATmega' 
 
 [built-in options]
 c_args = ['-mmcu=atmega328pb', '-ffunction-sections', '-fdata-sections', '-fstack-usage', '-I../lib/start/src/include', '-D__AVR_ATmega328PB__', '-DF_CPU=16000000UL']

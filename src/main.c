@@ -7,47 +7,65 @@
 #include <avr/io.h>
 #include <FreeRTOS.h>
 #include <task.h>
-#include <atmel_start.h>
 #include <time.h>
 #include <util/delay.h>
+#include "projdefs.h"
+#include <csp/csp.h>
+#include <atmel_start.h>
 
-void vLEDFlashTask(void *pvParms)
-{
+void vLEDFlashTask(void * pvParms) {
 	DDRB |= _BV(PB5);
+	PORTB ^= _BV(PB5);  // green
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = 1000;
+	const TickType_t xFrequency = pdMS_TO_TICKS(1000);
 	xLastWakeTime = xTaskGetTickCount();
 
-	for(;;) {
-		PORTB ^= _BV(PB5); // green
+	for (;;) {
+		PORTB ^= _BV(PB5);  // green
+		// PORTB ^= _BV(PB1); // green
+		// PORTB ^= _BV(PB2); // yellow
+		// PORTB ^= _BV(PB3); // red
 		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 
-int main(void)
-{
-	/* Initializes MCU, drivers and middleware */
-	atmel_start_init();
-
-	/*
-	for(;;) {
-		vLEDToggle();
-		PORTB ^= _BV(PB1); // green
-		PORTB ^= _BV(PB2); // yellow
-		PORTB ^= _BV(PB3); // red
-		_delay_ms(1000);
+void router_task(void * param) {
+	while (1) {
+		csp_route_work();
 	}
-	*/
-
-	static StaticTask_t led_task_tcb __attribute__((section(".noinit")));
-	static StackType_t led_task_stack[64] __attribute__((section(".noinit")));
-	xTaskCreateStatic(vLEDFlashTask, "LED", 64, NULL, 1, led_task_stack, &led_task_tcb);
-
-	vTaskStartScheduler();
 }
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName) {
-    for(;;);
+int main(void) {
+
+	atmel_start_init();
+
+	csp_conf.hostname = "atmega";
+	csp_conf.model = "328pb";
+	csp_conf.revision = "1";
+	csp_conf.conn_dfl_so = CSP_O_NONE;
+	csp_conf.dedup = 0;
+	csp_conf.version = 2;
+	csp_init();
+
+	static StaticTask_t led_task_tcb;
+	static StackType_t led_task_stack[32];
+	xTaskCreateStatic(vLEDFlashTask, "LED", 64, NULL, 1, led_task_stack, &led_task_tcb);
+
+	static StaticTask_t router_tcb;
+	static StackType_t router_stack[64];
+	xTaskCreateStatic(router_task, "RTE", 64, NULL, 2, router_stack, &router_tcb);
+
+	csp_bind_callback(csp_service_handler, CSP_ANY);
+
+	vTaskStartScheduler();
+	while (1);
+}
+
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName) {
+	for (;;) {
+		PORTB ^= _BV(PB5);
+		_delay_ms(10);
+	};
 }
 
 /*

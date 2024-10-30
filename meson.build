@@ -6,28 +6,37 @@ project('csp-avr', 'c', subproject_dir: 'lib', default_options: [
 	'csp:have_stdio=false',
 	'csp:use_hmac=false',
 	'csp:use_promisc=false',
+        'csp:enable_pic=false',
+        'csp:enable_csp_print=false',
+        'csp:use_rdp=false',
+        'csp:use_dedup=false',
+        'csp:use_crc32=false',
+        'csp:qfifo_len=8',
+        'csp:buffer_count=8',
+        'csp:buffer_size=128',
+        'csp:version=2',
 ])
+
+add_project_arguments('-save-temps', language: 'c')
+
 
 atmel_start_dep = subproject('start').get_variable('atmel_start_dep')
 freertos_dep = subproject('freertos').get_variable('freertos_dep')
+csp_dep = dependency('csp', fallback: ['csp', 'csp_dep'])
 
 sources = files(
   'src/main.c',
 )
 
-#include_dirs = include_directories(
-#  'include',
-#)
 
 # Define the executable and link with Atmel Start and FreeRTOS libraries
 main_elf = executable('main',
   sources,
-  #  include_directories: include_dirs,
   #c_args: c_args,
   link_args: [
     '-Wl,-Map,output.map'
   ],
-  dependencies: [atmel_start_dep, freertos_dep],  # Link with dependencies
+  dependencies: [atmel_start_dep, freertos_dep, csp_dep],  # Link with dependencies
   install: false
 )
 
