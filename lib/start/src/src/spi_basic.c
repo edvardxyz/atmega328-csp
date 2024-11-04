@@ -59,18 +59,18 @@ static SPI_0_descriptor_t SPI_0_desc;
 void SPI_0_init()
 {
 
-	/* Enable SPI0 */
-	PRR0 &= ~(1 << PRSPI0);
+	/* Enable SPI1 */
+	PRR1 &= ~(1 << PRSPI1);
 
-	SPCR0 = 1 << SPE                     /* SPI module enable: enabled */
-	        | 0 << DORD                  /* Data order: disabled */
-	        | 1 << MSTR                  /* Master/Slave select: enabled */
-	        | 0 << CPOL                  /* Clock polarity: disabled */
-	        | 0 << CPHA                  /* Clock phase: disabled */
-	        | 1 << SPIE                  /* SPI interrupt enable: enabled */
-	        | (0 << SPR1) | (0 << SPR0); /* SPI Clock rate selection: fosc/4 */
+	SPCR1 = 1 << SPE                       /* SPI module enable: enabled */
+	        | 0 << DORD                    /* Data order: disabled */
+	        | 1 << MSTR                    /* Master/Slave select: enabled */
+	        | 0 << CPOL                    /* Clock polarity: disabled */
+	        | 0 << CPHA                    /* Clock phase: disabled */
+	        | 1 << SPIE                    /* SPI interrupt enable: enabled */
+	        | (0 << SPR11) | (0 << SPR10); /* SPI Clock rate selection: fosc/4 */
 
-	// SPSR0 = (0 << SPI2X); /* Disable double SPI speed */
+	// SPSR1 = (0 << SPI2X1); /* Disable double SPI speed */
 
 	SPI_0_desc.status = SPI_FREE;
 	SPI_0_desc.cb     = NULL;
@@ -85,7 +85,7 @@ void SPI_0_init()
  */
 void SPI_0_enable()
 {
-	SPCR0 |= (1 << SPE);
+	SPCR1 |= (1 << SPE);
 }
 
 /**
@@ -97,7 +97,7 @@ void SPI_0_enable()
  */
 void SPI_0_disable()
 {
-	SPCR0 &= ~(1 << SPE);
+	SPCR1 &= ~(1 << SPE);
 }
 
 /*
@@ -112,13 +112,13 @@ void SPI_0_register_callback(spi_transfer_done_cb_t f)
 	SPI_0_desc.cb = f;
 }
 
-ISR(SPI0_STC_vect)
+ISR(SPI1_STC_vect)
 {
 	/* SPI_0_desc.data points to array element
 	   to write the received data to. The data to be transmitted
 	   is in the next array element.
 	*/
-	uint8_t rdata = SPDR0;
+	uint8_t rdata = SPDR1;
 	uint8_t wdata = 0;
 
 	if (SPI_0_desc.type != SPI_WRITE) {
@@ -134,7 +134,7 @@ ISR(SPI0_STC_vect)
 	// if more bytes to be transferred
 	if (SPI_0_desc.size != 0) {
 		// more data to send, send a byte
-		SPDR0 = wdata;
+		SPDR1 = wdata;
 	}
 
 	// if last byte has been transferred, update status
@@ -202,7 +202,7 @@ uint8_t SPI_0_exchange_byte(uint8_t data)
 	SPI_0_desc.type   = SPI_READ;
 	SPI_0_desc.status = SPI_BUSY;
 
-	SPDR0 = *SPI_0_desc.data;
+	SPDR1 = *SPI_0_desc.data;
 	while (SPI_0_desc.status == SPI_BUSY)
 		;
 	return data;
@@ -215,7 +215,7 @@ void SPI_0_exchange_block(void *block, uint8_t size)
 	SPI_0_desc.type   = SPI_EXCHANGE;
 	SPI_0_desc.status = SPI_BUSY;
 
-	SPDR0 = *SPI_0_desc.data;
+	SPDR1 = *SPI_0_desc.data;
 }
 
 void SPI_0_write_block(void *block, uint8_t size)
@@ -225,7 +225,7 @@ void SPI_0_write_block(void *block, uint8_t size)
 	SPI_0_desc.type   = SPI_WRITE;
 	SPI_0_desc.status = SPI_BUSY;
 
-	SPDR0 = *SPI_0_desc.data;
+	SPDR1 = *SPI_0_desc.data;
 }
 
 void SPI_0_read_block(void *block, uint8_t size)
@@ -235,5 +235,5 @@ void SPI_0_read_block(void *block, uint8_t size)
 	SPI_0_desc.type   = SPI_READ;
 	SPI_0_desc.status = SPI_BUSY;
 
-	SPDR0 = 0;
+	SPDR1 = 0;
 }

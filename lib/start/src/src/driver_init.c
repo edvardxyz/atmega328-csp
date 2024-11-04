@@ -47,9 +47,9 @@ void SPI_0_initialization(void)
 {
 
 	// Set pin direction to input
-	PB4_set_dir(PORT_DIR_IN);
+	PC0_set_dir(PORT_DIR_IN);
 
-	PB4_set_pull_mode(
+	PC0_set_pull_mode(
 	    // <y> Pull configuration
 	    // <id> pad_pull_config
 	    // <PORT_PULL_OFF"> Off
@@ -57,9 +57,9 @@ void SPI_0_initialization(void)
 	    PORT_PULL_OFF);
 
 	// Set pin direction to output
-	PB3_set_dir(PORT_DIR_OUT);
+	PE3_set_dir(PORT_DIR_OUT);
 
-	PB3_set_level(
+	PE3_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -67,9 +67,9 @@ void SPI_0_initialization(void)
 	    false);
 
 	// Set pin direction to output
-	PB5_set_dir(PORT_DIR_OUT);
+	PC1_set_dir(PORT_DIR_OUT);
 
-	PB5_set_level(
+	PC1_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -84,9 +84,9 @@ void USART_0_initialization(void)
 {
 
 	// Set pin direction to input
-	PD0_set_dir(PORT_DIR_IN);
+	PB4_set_dir(PORT_DIR_IN);
 
-	PD0_set_pull_mode(
+	PB4_set_pull_mode(
 	    // <y> Pull configuration
 	    // <id> pad_pull_config
 	    // <PORT_PULL_OFF"> Off
@@ -94,9 +94,9 @@ void USART_0_initialization(void)
 	    PORT_PULL_OFF);
 
 	// Set pin direction to output
-	PD1_set_dir(PORT_DIR_OUT);
+	PB3_set_dir(PORT_DIR_OUT);
 
-	PD1_set_level(
+	PB3_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low

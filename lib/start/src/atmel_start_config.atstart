@@ -92,7 +92,7 @@ drivers:
       domain_group: null
   SPI_0:
     user_label: SPI_0
-    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::SPI0::driver_config_definition::SPI.Master.Interrupt::Drivers:SPI:Basic
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::SPI1::driver_config_definition::SPI.Master.Interrupt::Drivers:SPI:Basic
     functionality: SPI
     api: Drivers:SPI:Basic
     configuration:
@@ -108,14 +108,14 @@ drivers:
     variant:
       specification: MASTER=1
       required_signals:
-      - name: SPI0/MISO
-        pad: PB4
+      - name: SPI1/MISO
+        pad: PC0
         label: MISO
-      - name: SPI0/MOSI
-        pad: PB3
+      - name: SPI1/MOSI
+        pad: PE3
         label: MOSI
-      - name: SPI0/SCK
-        pad: PB5
+      - name: SPI1/SCK
+        pad: PC1
         label: SCK
     clocks:
       domain_group:
@@ -128,10 +128,12 @@ drivers:
           spi_clock_source: CLKio
   USART_0:
     user_label: USART_0
-    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::USART0::driver_config_definition::Async.Polled.Mode::Drivers:USART:Basic
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::USART1::driver_config_definition::Async.IRQ.Mode::Drivers:USART:Basic
     functionality: USART
     api: Drivers:USART:Basic
     configuration:
+      driver_rx_buffer_size: '8'
+      driver_tx_buffer_size: '8'
       printf_support: true
       usart_baud_rate: 9600
       usart_mpcm: false
@@ -152,11 +154,11 @@ drivers:
     variant:
       specification: UMSEL=0
       required_signals:
-      - name: USART0/RXD
-        pad: PD0
+      - name: USART1/RXD
+        pad: PB4
         label: RXD
-      - name: USART0/TXD
-        pad: PD1
+      - name: USART1/TXD
+        pad: PB3
         label: TXD
     clocks:
       domain_group:
@@ -180,23 +182,23 @@ pads:
     mode: Digital input
     user_label: PB4
     configuration: null
-  PB5:
-    name: PB5
-    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PB5
+  PE3:
+    name: PE3
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PE3
     mode: Digital output
-    user_label: PB5
+    user_label: PE3
     configuration: null
-  PD0:
-    name: PD0
-    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PD0
+  PC0:
+    name: PC0
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PC0
     mode: Digital input
-    user_label: PD0
+    user_label: PC0
     configuration: null
-  PD1:
-    name: PD1
-    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PD1
+  PC1:
+    name: PC1
+    definition: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::pad::PC1
     mode: Digital output
-    user_label: PD1
+    user_label: PC1
     configuration: null
 toolchain_options:
 - definition:
@@ -207,14 +209,14 @@ toolchain_options:
     linker_config:
       xc8_linker_miscellaneous_LinkerFlags: ''
 - definition:
-    identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Microchip.Studio.gcc:7.0.0
+    identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Atmel.Studio:7.0.0
   configuration:
     compiler_config:
       avrgcc_compiler_miscellaneous_OtherFlags: ''
     linker_config:
       avrgcc_linker_miscellaneous_LinkerFlags: ''
 - definition:
-    identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Atmel.Studio:7.0.0
+    identifier: Atmel:ATMega328PB_drivers:1.0.0::ATmega328PB-MU::environment_definition::All:Microchip.Studio.gcc:7.0.0
   configuration:
     compiler_config:
       avrgcc_compiler_miscellaneous_OtherFlags: ''
