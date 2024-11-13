@@ -51,6 +51,8 @@
 
 #include <usart_basic.h>
 
+#include <usart_basic.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

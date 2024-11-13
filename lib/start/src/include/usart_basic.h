@@ -35,39 +35,70 @@
 extern "C" {
 #endif
 
-/* USART_0 Ringbuffer */
+/* USART0 Ringbuffer */
 
-#define USART_0_RX_BUFFER_SIZE 8
-#define USART_0_TX_BUFFER_SIZE 8
-#define USART_0_RX_BUFFER_MASK (USART_0_RX_BUFFER_SIZE - 1)
-#define USART_0_TX_BUFFER_MASK (USART_0_TX_BUFFER_SIZE - 1)
+#define USART0_RX_BUFFER_SIZE 8
+#define USART0_TX_BUFFER_SIZE 8
+#define USART0_RX_BUFFER_MASK (USART0_RX_BUFFER_SIZE - 1)
+#define USART0_TX_BUFFER_MASK (USART0_TX_BUFFER_SIZE - 1)
 
 typedef enum { RX_CB = 1, UDRE_CB } usart_cb_type_t;
 typedef void (*usart_cb_t)(void);
 
-int8_t USART_0_init();
+int8_t USART0_init();
 
-void USART_0_enable();
+void USART0_enable();
 
-void USART_0_enable_rx();
+void USART0_enable_rx();
 
-void USART_0_enable_tx();
+void USART0_enable_tx();
 
-void USART_0_disable();
+void USART0_disable();
 
-uint8_t USART_0_get_data();
+uint8_t USART0_get_data();
 
-bool USART_0_is_tx_ready();
+bool USART0_is_tx_ready();
 
-bool USART_0_is_rx_ready();
+bool USART0_is_rx_ready();
 
-bool USART_0_is_tx_busy();
+bool USART0_is_tx_busy();
 
-uint8_t USART_0_read(void);
+uint8_t USART0_read(void);
 
-void USART_0_write(const uint8_t data);
+void USART0_write(const uint8_t data);
 
-void USART_0_set_ISR_cb(usart_cb_t cb, usart_cb_type_t type);
+void USART0_set_ISR_cb(usart_cb_t cb, usart_cb_type_t type);
+
+/* USART1 Ringbuffer */
+
+#define USART1_RX_BUFFER_SIZE 8
+#define USART1_TX_BUFFER_SIZE 8
+#define USART1_RX_BUFFER_MASK (USART1_RX_BUFFER_SIZE - 1)
+#define USART1_TX_BUFFER_MASK (USART1_TX_BUFFER_SIZE - 1)
+
+int8_t USART1_init();
+
+void USART1_enable();
+
+void USART1_enable_rx();
+
+void USART1_enable_tx();
+
+void USART1_disable();
+
+uint8_t USART1_get_data();
+
+bool USART1_is_tx_ready();
+
+bool USART1_is_rx_ready();
+
+bool USART1_is_tx_busy();
+
+uint8_t USART1_read(void);
+
+void USART1_write(const uint8_t data);
+
+void USART1_set_ISR_cb(usart_cb_t cb, usart_cb_type_t type);
 
 #ifdef __cplusplus
 }

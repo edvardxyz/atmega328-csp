@@ -80,7 +80,34 @@ void SPI_0_initialization(void)
 }
 
 /* configure pins and initialize registers */
-void USART_0_initialization(void)
+void USART0_initialization(void)
+{
+
+	// Set pin direction to input
+	PD0_set_dir(PORT_DIR_IN);
+
+	PD0_set_pull_mode(
+	    // <y> Pull configuration
+	    // <id> pad_pull_config
+	    // <PORT_PULL_OFF"> Off
+	    // <PORT_PULL_UP"> Pull-up
+	    PORT_PULL_OFF);
+
+	// Set pin direction to output
+	PD1_set_dir(PORT_DIR_OUT);
+
+	PD1_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	USART0_init();
+}
+
+/* configure pins and initialize registers */
+void USART1_initialization(void)
 {
 
 	// Set pin direction to input
@@ -103,7 +130,7 @@ void USART_0_initialization(void)
 	    // <true"> High
 	    false);
 
-	USART_0_init();
+	USART1_init();
 }
 
 /**
@@ -121,5 +148,7 @@ void system_init()
 
 	SPI_0_initialization();
 
-	USART_0_initialization();
+	USART0_initialization();
+
+	USART1_initialization();
 }
