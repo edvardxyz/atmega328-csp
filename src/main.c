@@ -15,6 +15,7 @@
 #include <csp/csp.h>
 #include <atmel_start.h>
 #include <csp/csp_hooks.h>
+#include <semphr.h>
 
 #include <csp/drivers/usart.h>
 #include <usart_basic.h>
@@ -31,11 +32,11 @@ static void vLEDFlashTask(void * pvParms) {
 
 	for (;;) {
 		PORTB ^= _BV(PB5);  // green
-		printf("hello\n");
-		// USART_0_read()
-		//  PORTB ^= _BV(PB1); // green
-		//  PORTB ^= _BV(PB2); // yellow
-		//  PORTB ^= _BV(PB3); // red
+		// printf("hello\n");
+		//  USART_0_read()
+		//   PORTB ^= _BV(PB1); // green
+		//   PORTB ^= _BV(PB2); // yellow
+		//   PORTB ^= _BV(PB3); // red
 		vTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
@@ -46,23 +47,12 @@ static void router_task(void * param) {
 	}
 }
 
-void kiss_driver_rx() {
-}
-
-typedef void (*uart_cb_t)(void * data, uint32_t len, int status, BaseType_t * xTaskWoken);
-typedef struct uart_config_s {
-
-	TaskHandle_t uart_task_handle;
-	uart_cb_t tx_cb;
-	uart_cb_t rx_cb;
-	uint32_t baudrate;
-	void * rx_data;
-	uint32_t rx_len;
-} uart_config_t;
-
 int main(void) {
 
 	atmel_start_init();
+	// printf("atmel init done\n");
+
+	//csp_dbg_packet_print = 0;
 
 	static StaticTask_t led_task_tcb;
 	static StackType_t led_task_stack[configMINIMAL_STACK_SIZE] __attribute__((section(".noinit")));
@@ -75,7 +65,9 @@ int main(void) {
 	csp_conf.dedup = 0;
 	csp_conf.version = 2;
 
+	// printf("before uart_init\n");
 	uart_init();
+	// printf("after uart_init\n");
 	csp_init();
 
 	static StaticTask_t router_tcb;
@@ -91,6 +83,7 @@ int main(void) {
 }
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName) {
+	// printf("stackoverflow\n");
 	for (;;) {
 		PORTB ^= _BV(PB5);
 		_delay_ms(100);
@@ -118,14 +111,19 @@ int csp_clock_set_time(const csp_timestamp_t * time) {
 }
 
 void csp_reboot_hook(void) {
+	//printf("reboot\n");
 }
 void csp_shutdown_hook(void) {
 }
 
 static int kiss_driver_tx(void * driver_data, const unsigned char * data, size_t data_length) {
 
-	for (uint8_t i = 0; i < data_length; i++) {
-		USART_0_write(data[i]);
+	for (uint16_t i = 0; i < data_length; i++) {
+		if(USART1_is_tx_busy()){
+			_delay_us(1);
+		}
+		USART1_write(data[i]);
+		UDR1 = data[i];
 	}
 	return 0;
 }
@@ -139,27 +137,38 @@ csp_iface_t csp_if_kiss = {
 	.interface_data = &ifdata,
 };
 
-void USART_0_csp_rx_isr_cb(void) {
+void USART1_csp_rx_isr_cb(void) {
 
 	BaseType_t xTaskWoken = pdFALSE;
 	uint8_t data;
 
 	/* Read the received data */
 	data = UDR1;
-
 	csp_kiss_rx(&csp_if_kiss, &data, 1, &xTaskWoken);
 }
 
-void csp_usart_lock(void * driver_data){};
-void csp_usart_unlock(void * driver_data){};
+static StaticSemaphore_t kiss_lock_buf;
+static SemaphoreHandle_t kiss_lock = NULL;
+
+void csp_usart_lock(void * driver_data) {
+	xSemaphoreTake(kiss_lock, 100);
+}
+
+void csp_usart_unlock(void * driver_data) {
+	xSemaphoreGive(kiss_lock);
+}
 
 int uart_init() {
+
+	if (kiss_lock == NULL) {
+		kiss_lock = xSemaphoreCreateMutexStatic(&kiss_lock_buf);
+	}
 
 	csp_if_kiss.addr = 1;
 	csp_if_kiss.netmask = 8;
 	csp_if_kiss.is_default = 1;
 
-	USART_0_set_ISR_cb(USART_0_csp_rx_isr_cb, RX_CB);
+	USART1_set_ISR_cb(USART1_csp_rx_isr_cb, RX_CB);
 
 	csp_kiss_add_interface(&csp_if_kiss);
 

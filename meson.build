@@ -12,8 +12,8 @@ project('csp-avr', 'c', subproject_dir: 'lib', default_options: [
         'csp:use_dedup=false',
         'csp:use_crc32=false',
         'csp:qfifo_len=2',
-        'csp:buffer_count=4',
-        'csp:buffer_size=32',
+        'csp:buffer_count=3',
+        'csp:buffer_size=70',
         'csp:conn_rxqueue_len=2',
         'csp:conn_max=2',
         'csp:port_max_bind=4',
@@ -34,7 +34,7 @@ sources = files(
 
 
 # Define the executable and link with Atmel Start and FreeRTOS libraries
-main_elf = executable('main',
+main_elf = executable('main.elf',
   sources,
   #c_args: c_args,
   link_args: [
