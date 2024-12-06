@@ -12,12 +12,15 @@ project('csp-avr', 'c', subproject_dir: 'lib', default_options: [
         'csp:use_dedup=false',
         'csp:use_crc32=false',
         'csp:qfifo_len=2',
-        'csp:buffer_count=3',
-        'csp:buffer_size=70',
+        'csp:buffer_count=4',
+        'csp:buffer_size=32',
         'csp:conn_rxqueue_len=2',
         'csp:conn_max=2',
         'csp:port_max_bind=4',
         'csp:version=2',
+  #'libparam:vmem_fram=false', 
+  #	'libparam:list_dynamic=false',
+  #	'libparam:have_float=false',
         
 ])
 
@@ -27,11 +30,13 @@ add_project_arguments('-save-temps', language: 'c')
 atmel_start_dep = subproject('start').get_variable('atmel_start_dep')
 freertos_dep = subproject('freertos').get_variable('freertos_dep')
 csp_dep = dependency('csp', fallback: ['csp', 'csp_dep'])
+#param_dep = dependency('param', fallback: ['libparam', 'param_dep'])
 
 sources = files(
   'src/main.c',
+  'src/twi.c',
+  'src/ssd1306.c',
 )
-
 
 # Define the executable and link with Atmel Start and FreeRTOS libraries
 main_elf = executable('main.elf',
@@ -40,7 +45,7 @@ main_elf = executable('main.elf',
   link_args: [
     '-Wl,-Map,output.map'
   ],
-  dependencies: [atmel_start_dep, freertos_dep, csp_dep],  # Link with dependencies
+  dependencies: [atmel_start_dep, freertos_dep, csp_dep], #param_dep],  # Link with dependencies
   install: false
 )
 

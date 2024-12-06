@@ -14,4 +14,4 @@ freertos_port = 'GCC/ATmega'
 
 [built-in options]
 c_args = ['-mmcu=atmega328pb', '-ffunction-sections', '-fdata-sections', '-fstack-usage', '-I../lib/start/src/include', '-D__AVR_ATmega328PB__', '-DF_CPU=16000000UL']
-c_link_args = ['-mmcu=atmega328pb', '-ffunction-sections', '-fdata-sections']
+c_link_args = ['-mmcu=atmega328pb', '-ffunction-sections', '-Wl,--gc-sections']

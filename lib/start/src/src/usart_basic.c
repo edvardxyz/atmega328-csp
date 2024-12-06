@@ -43,13 +43,13 @@
 
 #if defined(__GNUC__)
 
-int USART0_printCHAR(char character, FILE *stream)
+int USART1_printCHAR(char character, FILE *stream)
 {
-	USART0_write(character);
+	USART1_write(character);
 	return 0;
 }
 
-FILE USART0_stream = FDEV_SETUP_STREAM(USART0_printCHAR, NULL, _FDEV_SETUP_WRITE);
+FILE USART1_stream = FDEV_SETUP_STREAM(USART1_printCHAR, NULL, _FDEV_SETUP_WRITE);
 
 #elif defined(__ICCAVR__)
 
@@ -280,9 +280,6 @@ int8_t USART0_init()
 	USART0_tx_head     = x;
 	USART0_tx_elements = x;
 
-#if defined(__GNUC__)
-	stdout = &USART0_stream;
-#endif
 
 	return 0;
 }
@@ -564,6 +561,10 @@ int8_t USART1_init()
 	USART1_tx_tail     = x;
 	USART1_tx_head     = x;
 	USART1_tx_elements = x;
+
+#if defined(__GNUC__)
+	stdout = &USART1_stream;
+#endif
 
 	return 0;
 }
